@@ -12,8 +12,8 @@ class db:
     return r.text
   
   @staticmethod
-  def delete(k):
-    r = httpx.get(f"{url}/del?key={k}&file=notes")
+  def delete(k, f):
+    r = httpx.get(f"{url}/del?key={k}&file={f}")
     return r.text
   
   @staticmethod
@@ -27,8 +27,8 @@ class db:
     return r.text
   
   @staticmethod
-  def render():
-    r = httpx.get(f"{url}/list?file=notes")
+  def render(f):
+    r = httpx.get(f"{url}/list?file={f}")
     return r.text
 
   @staticmethod
@@ -69,6 +69,6 @@ class ldb:
 
 class render:
   @staticmethod
-  def online():
-    with os.scandir('/home/runner/db/cdn') as i:
+  def scan(_dir):
+    with os.scandir(_dir) as i:
       return [entry.name for entry in i]

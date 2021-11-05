@@ -1,6 +1,7 @@
 from discord.ext import commands
 from wrapper import db
 import asyncio
+import json
 
 class DevCommands(commands.Cog, name='Developer Commands'):
   '''These are the developer commands'''
@@ -41,12 +42,22 @@ class DevCommands(commands.Cog, name='Developer Commands'):
     await a.edit(content="Query made sending! :cloud:")
   
   @commands.command()
-  async def get(self, ctx, arg1):
+  async def tag(self, ctx, arg1):
     a = await ctx.reply(f"Constructing your query\n```{arg1} : [???]```")
-    b = await a.edit(content=db.key_focus(arg1, '4162'))
+    b = await a.edit(content=db.key_focus(arg1, ctx.guild.id))
     await b.edit(f"{db.key_focus(arg1, ctx.guild.id)}")
   
-
+  @commands.command()
+  async def delete(self, ctx, arg1):
+    db.delete(arg1, ctx.guild.id)
+    await ctx.reply(f"Deleted your tag. :cloud:")
+  
+  @commands.command()
+  async def tags(self, ctx):
+    e = json.loads(db.render(ctx.guild.id))
+    e = "\n".join([str(_tag) for _tag in e])
+    
+    await ctx.send()
 
 def setup(bot):
   bot.add_cog(DevCommands(bot))
